@@ -1,0 +1,157 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+
+const SignupPage = () => {
+  const router = useRouter();
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [message, setMessage] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleEmailSignup = async (e) => {
+    e.preventDefault();
+    if (!name.trim()) {
+      setError("Please enter your name.");
+      return;
+    }
+    setLoading(true);
+    setError("");
+    setMessage("");
+
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, name }),
+      });
+      const data = await res.json();
+      if (!data) {
+        throw new Error("Signup went wrong");
+      }
+      if (data.success) {
+        router.push("/home");
+      } else {
+        setError(data.error);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <section className="flex items-center justify-center min-h-screen bg-[#0a0a0a]">
+      <div className="w-95 p-10 bg-[#111] border border-[#222] rounded-2xl">
+        <h1 className="text-2xl font-medium text-white tracking-tight">
+          Create an account
+        </h1>
+        <p className="text-sm text-[#555] mt-1 mb-7">
+          Start your journey today
+        </p>
+
+        {/* OAuth */}
+        <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl text-[#ccc] text-sm hover:bg-[#222] hover:text-white transition-colors mb-2.5 cursor-pointer">
+          <img
+            src="https://images.shadcnspace.com/assets/svgs/icon-google.svg"
+            alt="google"
+            className="h-4 w-4"
+          />
+          Continue with Google
+        </button>
+        <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl text-[#ccc] text-sm hover:bg-[#222] hover:text-white transition-colors cursor-pointer">
+          <img
+            src="https://images.shadcnspace.com/assets/svgs/icon-github.svg"
+            alt="github"
+            className="bg-white rounded-full h-4 w-4"
+          />
+          Continue with GitHub
+        </button>
+
+        <div className="flex items-center gap-3 my-5">
+          <div className="flex-1 h-px bg-[#222]" />
+          <span className="text-xs text-[#444]">or continue with email</span>
+          <div className="flex-1 h-px bg-[#222]" />
+        </div>
+
+        {/* Name */}
+        <div className="mb-3.5">
+          <label className="block text-xs text-[#666] font-medium mb-1.5">
+            Full Name
+          </label>
+          <input
+            type="text"
+            placeholder="John Doe"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full px-3.5 py-3 bg-[#141414] border border-[#242424] rounded-xl text-[#e0e0e0] text-sm placeholder-[#3a3a3a] outline-none focus:border-[#444] transition-colors"
+          />
+        </div>
+
+        {/* Email */}
+        <div className="mb-3.5">
+          <label className="block text-xs text-[#666] font-medium mb-1.5">
+            Email
+          </label>
+          <input
+            type="email"
+            placeholder="example@gmail.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full px-3.5 py-3 bg-[#141414] border border-[#242424] rounded-xl text-[#e0e0e0] text-sm placeholder-[#3a3a3a] outline-none focus:border-[#444] transition-colors"
+          />
+        </div>
+
+        {/* Password */}
+        <div className="mb-1.5">
+          <label className="block text-xs text-[#666] font-medium mb-1.5">
+            Password
+          </label>
+          <input
+            type="password"
+            placeholder="••••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full px-3.5 py-3 bg-[#141414] border border-[#242424] rounded-xl text-[#e0e0e0] text-sm placeholder-[#3a3a3a] outline-none focus:border-[#444] transition-colors"
+          />
+        </div>
+
+        {error && (
+          <p className="text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mt-2">
+            {error}
+          </p>
+        )}
+        {message && (
+          <p className="text-sm text-green-600 bg-green-50 border border-green-200 rounded-lg px-3 py-2 mt-2">
+            {message}
+          </p>
+        )}
+
+        <button
+          onClick={handleEmailSignup}
+          disabled={loading}
+          className="w-full mt-4 py-3 bg-white text-[#0a0a0a] rounded-xl text-sm font-medium hover:bg-[#e8e8e8] transition-colors cursor-pointer disabled:opacity-50"
+        >
+          {loading ? "Loading..." : "Sign up"}
+        </button>
+
+        <p className="mt-5 text-center text-sm text-[#444]">
+          Already have an account?{" "}
+          <button
+            onClick={() => router.push("/login")}
+            disabled={loading}
+            className="text-[#888] hover:text-[#ccc] transition-colors ml-0.5 cursor-pointer"
+          >
+            Log in
+          </button>
+        </p>
+      </div>
+    </section>
+  );
+};
+
+export default SignupPage;
