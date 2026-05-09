@@ -10,8 +10,9 @@ export default async function Home() {
 
   try {
     await verifySession(token);
-    redirect("/home");
   } catch {
-    redirect("/login");
+    return <LandingPage />;
   }
+
+  redirect("/home"); // ← outside try/catch
 }

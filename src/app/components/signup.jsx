@@ -55,7 +55,10 @@ const SignupPage = () => {
         </p>
 
         {/* OAuth */}
-        <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl text-[#ccc] text-sm hover:bg-[#222] hover:text-white transition-colors mb-2.5 cursor-pointer">
+        <button
+          onClick={() => window.location.href = "/api/auth/google"}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl text-[#ccc] text-sm hover:bg-[#222] hover:text-white transition-colors mb-2.5 cursor-pointer"
+        >
           <img
             src="https://images.shadcnspace.com/assets/svgs/icon-google.svg"
             alt="google"
@@ -63,7 +66,10 @@ const SignupPage = () => {
           />
           Continue with Google
         </button>
-        <button className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl text-[#ccc] text-sm hover:bg-[#222] hover:text-white transition-colors cursor-pointer">
+        <button
+          onClick={() => window.location.href = "/api/auth/github"}
+          className="w-full flex items-center justify-center gap-3 px-4 py-3 bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl text-[#ccc] text-sm hover:bg-[#222] hover:text-white transition-colors cursor-pointer"
+        >
           <img
             src="https://images.shadcnspace.com/assets/svgs/icon-github.svg"
             alt="github"

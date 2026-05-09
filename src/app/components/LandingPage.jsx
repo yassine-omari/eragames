@@ -8,6 +8,7 @@ const LandingPage = () => {
   return (
     <div className="bg-[#0a0a0a] min-h-screen font-sans px-6">
       {/* Navbar */}
+
       <nav className="flex justify-between items-center py-5 border-b border-[#1e1e1e]">
         <div className="text-lg font-medium text-white tracking-tight">
           Era<span className="text-[#6c63ff]">Games</span>
