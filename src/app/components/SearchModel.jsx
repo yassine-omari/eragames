@@ -122,18 +122,16 @@ const SearchModal = ({ open, onClose }) => {
                 }}
                 className="flex items-center gap-3 w-full px-4 py-3 hover:bg-white/5 transition-colors text-left"
               >
-                {game.image && (
+                {game.background_image && (
                   <img
-                    src={game.image}
-                    alt={game.title}
+                    src={game.background_image}
+                    alt={game.name}
                     className="w-10 h-10 rounded-lg object-cover"
                   />
                 )}
                 <div>
-                  <p className="text-sm text-[#ddd] font-medium">
-                    {game.title}
-                  </p>
-                  <p className="text-xs text-[#555]">{game.genre}</p>
+                  <p className="text-sm text-[#ddd] font-medium">{game.name}</p>
+                  <p className="text-xs text-[#555]">{game.genres[0]?.name}</p>
                 </div>
               </button>
             ))}

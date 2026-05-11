@@ -4,6 +4,7 @@ export const dynamic = "force-dynamic";
 import React from "react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
+import { getPopularMovies } from "../../../lib/rawg";
 
 const FEATURES = [
   {
@@ -79,6 +80,7 @@ const Page = () => {
           className="flex items-center justify-center gap-3 mb-16"
         >
           <motion.button
+          onClick={() => router.push("/home/browse")}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
             className="bg-transparent border border-[#2a2a2a] text-[#aaa] px-7 py-3 rounded-xl text-sm hover:border-[#444] hover:text-white transition-colors cursor-pointer"

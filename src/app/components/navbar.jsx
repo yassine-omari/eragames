@@ -39,7 +39,7 @@ const Navbar = ({ user }) => {
   return (
     <>
       <SearchModal open={searchOpen} onClose={() => setSearchOpen(false)} />
-      <nav className="flex justify-between items-center px-6 h-[80px] border-b border-[#1e1e1e] bg-[#0a0a0a] relative">
+      <nav className="sticky top-0 z-40 flex justify-between items-center px-6 h-[80px] border-b border-[#1e1e1e] bg-[#0a0a0a]/70 relative backdrop-blur-lg">
         {/* Logo */}
         <Link
           href="/"
