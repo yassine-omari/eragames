@@ -62,9 +62,9 @@ export async function GET(req) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
     });
-    return Response.redirect("http://localhost:3000/home");
+    return Response.redirect("https://eragames-seven.vercel.app/home");
   } catch (err) {
     console.error(err);
-    return Response.redirect("http://localhost:3000/login");
+    return Response.redirect("https://eragames-seven.vercel.app/login");
   }
 }
