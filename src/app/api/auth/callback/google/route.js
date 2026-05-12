@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 export async function GET(req) {
   try {
     const code = req.nextUrl.searchParams.get("code");
-    if (!code) return Response.redirect("http://localhost:3000/login");
+    if (!code) return Response.redirect("https://eragames-seven.vercel.app/login");
 
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
@@ -14,7 +14,7 @@ export async function GET(req) {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: "http://localhost:3000/api/auth/callback/google",
+        redirect_uri: "https://eragames-seven.vercel.app/api/auth/callback/google",
         grant_type: "authorization_code",
       }),
     });
