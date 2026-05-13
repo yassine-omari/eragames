@@ -2,10 +2,12 @@ import { prisma } from "../../../../../../lib/prisma";
 import { createSession } from "../../../../../../lib/session";
 import { cookies } from "next/headers";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export async function GET(req) {
   try {
     const code = req.nextUrl.searchParams.get("code");
-    if (!code) return Response.redirect("https://eragames-seven.vercel.app/login");
+    if (!code) return Response.redirect(`${BASE_URL}/login`);
 
     const tokenRes = await fetch("https://oauth2.googleapis.com/token", {
       method: "POST",
@@ -14,7 +16,7 @@ export async function GET(req) {
         code,
         client_id: process.env.GOOGLE_CLIENT_ID,
         client_secret: process.env.GOOGLE_CLIENT_SECRET,
-        redirect_uri: "https://eragames-seven.vercel.app/api/auth/callback/google",
+        redirect_uri: `${BASE_URL}/api/auth/callback/google`,
         grant_type: "authorization_code",
       }),
     });
@@ -38,11 +40,10 @@ export async function GET(req) {
     } else {
       user = await prisma.user.update({
         where: { email },
-        data: { name, profile: picture }, // ← always keep info fresh
+        data: { name, profile: picture },
       });
     }
 
-    // Step 4 — create session and redirect to home
     const token = await createSession(user.id);
 
     (await cookies()).set("session", token, {
@@ -51,9 +52,10 @@ export async function GET(req) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
     });
-    return Response.redirect("https://eragames-seven.vercel.app/home");
+
+    return Response.redirect(`${BASE_URL}/home`);
   } catch (err) {
     console.error(err);
-    return Response.redirect("https://eragames-seven.vercel.app/login");
+    return Response.redirect(`${BASE_URL}/login`);
   }
 }

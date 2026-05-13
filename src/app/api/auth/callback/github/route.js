@@ -2,10 +2,12 @@ import { prisma } from "../../../../../../lib/prisma";
 import { createSession } from "../../../../../../lib/session";
 import { cookies } from "next/headers";
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+
 export async function GET(req) {
   try {
     const code = req.nextUrl.searchParams.get("code");
-    if (!code) return Response.redirect("https://eragames-seven.vercel.app/login");
+    if (!code) return Response.redirect(`${BASE_URL}/login`);
 
     const tokenRes = await fetch(
       "https://github.com/login/oauth/access_token",
@@ -19,7 +21,7 @@ export async function GET(req) {
           code,
           client_id: process.env.GITHUB_CLIENT_ID,
           client_secret: process.env.GITHUB_CLIENT_SECRET,
-          redirect_uri: "https://eragames-seven.vercel.app/api/auth/callback/github",
+          redirect_uri: `${BASE_URL}/api/auth/callback/github`,
         }),
       },
     );
@@ -34,11 +36,10 @@ export async function GET(req) {
     const emailRes = await fetch("https://api.github.com/user/emails", {
       headers: { Authorization: `Bearer ${access_token}` },
     });
-
     const emails = await emailRes.json();
     const email = emails.find((e) => e.primary)?.email;
 
-    if (!email) return Response.redirect("https://eragames-seven.vercel.app/login");
+    if (!email) return Response.redirect(`${BASE_URL}/login`);
 
     let user = await prisma.user.findUnique({ where: { email } });
 
@@ -53,7 +54,6 @@ export async function GET(req) {
       });
     }
 
-    // Step 4 — create session and redirect to home
     const token = await createSession(user.id);
 
     (await cookies()).set("session", token, {
@@ -62,9 +62,10 @@ export async function GET(req) {
       sameSite: "lax",
       maxAge: 60 * 60 * 24 * 7,
     });
-    return Response.redirect("https://eragames-seven.vercel.app/home");
+
+    return Response.redirect(`${BASE_URL}/home`);
   } catch (err) {
     console.error(err);
-    return Response.redirect("https://eragames-seven.vercel.app/login");
+    return Response.redirect(`${BASE_URL}/login`);
   }
 }
